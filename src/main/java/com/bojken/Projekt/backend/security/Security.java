@@ -1,6 +1,7 @@
 package com.bojken.Projekt.backend.security;
 
 import com.bojken.Projekt.backend.authorities.UserRole;
+import com.bojken.Projekt.backend.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,7 +61,7 @@ public class Security {
     @Bean
     public RateLimiter rateLimiter () {
         RateLimiterConfig config = RateLimiterConfig.custom()
-                .limitForPeriod (1000) // Max requests per interval
+                .limitForPeriod (1000)
                 .limitRefreshPeriod (Duration.ofSeconds(30)) // Interval duration
                 .timeoutDuration (Duration.ofSeconds(5)) // Timeout for acquiring permits
                 .build();
