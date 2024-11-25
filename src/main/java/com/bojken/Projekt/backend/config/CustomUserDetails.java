@@ -1,6 +1,7 @@
 package com.bojken.Projekt.backend.config;
 
 
+import com.bojken.Projekt.backend.model.CustomUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
