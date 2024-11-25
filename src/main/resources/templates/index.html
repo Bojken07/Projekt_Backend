@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Film hantera</title>
+    <title>Film handle</title>
 </head>
 <body>
 
-<h1>Film Hanterare</h1>
+<h1>Film Handler</h1>
 
-<p>Välkommen <span th:text="${username}"></span></p>
+<p>Welcome <span th:text="${username}"></span></p>
 
 <form th:action="@{/logout}" method="post">
-    <button type="submit">Logga ut</button>
+    <button type="submit">Logout</button>
 </form>
 <br>
 <br/>
 
-<a href="/register">Registrera ny användare</a>
+<a href="/register">Register new user</a>
 <br/>
 <br/>
 
 <div>
-    <a href="/movies/savedfilms">Sparade filmer</a>
+    <a href="/movies/savedfilms">Saved movies</a>
     <br>
-    <a href="/movies/search">kanske söka film PÅGÅENDE ARBETE</a>
+    <a href="/movies/search">maybe search for a film ONGOING WORK</a>
     <br>
-    <a href="/movies/info">Film info ARBETE PÅGÅR</a>
+    <a href="/movies/info">Film info WORK IN PROGRESS</a>
     <br>
-    <a href="/movies/searchid">Sök film på id ARBETE PÅGÅR</a>
+    <a href="/movies/searchid">Search film by id WORK IN PROGRESS</a>
     <br>
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a href="/admin">Till admin sidan</a>
+        <a href="/admin">Admin page</a>
     </div>
 
 </div>
-<h2><span th:text="${username}"></span>'s filmer</h2>
+<h2><span th:text="${username}"></span>movies</h2>
 
 <div>
     <ul>

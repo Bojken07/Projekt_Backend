@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h1>Register new user</h1>
+<a href="/">Back to main page</a>
+
+<form th:action="@{/register}" th:object="${user}" method="post">
+
+    <label>Username
+        <input type="text" name="username" th:field="*{username}">
+    </label>
+
+    <div th:if="${#fields.hasErrors('username')}" class="error">
+        <ul>
+            <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
+        </ul>
+    </div>
+
+    <br/>
+
+    <div th:if="${status != 'användare registrerad'}">
+        <span th:text="${status}"></span>
+    </div>
+
+    <br/>
+    <br/>
+
+    <label>Password
+        <input type="password" name="password" th:field="*{password}">
+    </label>
+
+    <br/>
+    <br/>
+
+    <div th:if="${#fields.hasErrors('password')}" class="error">
+        <ul>
+            <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+        </ul>
+    </div>
+
+    <label>
+        roll:
+        <select th:field="*{userRole}">
+            <option th:each="index : ${roles}" th:value="${index}" th:text="${index}"></option>
+        </select>
+    </label>
+
+    <div th:if="${#fields.hasErrors('userRole')}" class="error">
+        <ul>
+            <li th:each="err : ${#fields.errors('userRole')}" th:text="${err}"></li>
+        </ul>
+    </div>
+
+    <br/>
+    <br/>
+
+
+
+    <button type="submit">Register!</button>
+
+</form>
+
+
+
+<br/>
+
+<div th:if="${status == 'User registered'}">
+    <span th:text="${status}"></span>
+</div>
+
+</body>
+</html>

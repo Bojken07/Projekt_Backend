@@ -4,8 +4,8 @@
     <title>Film sida</title>
 </head>
 <body>
-<h1>Film sida</h1>
-<a href="/">Tillbaka</a>
+<h1>Movie page</h1>
+<a href="/">Back</a>
 
 <div th:if="${saved}">
     <p th:text="${saved}"></p>
@@ -24,7 +24,7 @@
 
         <form th:action="@{/movies/savefilm}" th:object="${film}" method="post">
             <input type="hidden" th:field="*{id}"/>
-            <button type="submit">Spara film: FilmController saveFilm</button>
+            <button type="submit">Save film: FilmController saveFilm</button>
         </form>
 
     </div>
@@ -34,6 +34,6 @@
 
 </div>
 
-<a href="/">Tillbaka</a>
+<a href="/">Back</a>
 </body>
 </html>
