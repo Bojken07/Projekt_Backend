@@ -1,7 +1,11 @@
 package com.bojken.Projekt.backend.dao;
 
+import com.bojken.Projekt.backend.model.FilmModel;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface IFilmDAO {
     FilmModel save(FilmModel filmModel);

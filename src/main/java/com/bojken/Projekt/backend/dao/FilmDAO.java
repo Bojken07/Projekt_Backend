@@ -1,5 +1,7 @@
 package com.bojken.Projekt.backend.dao;
 
+import com.bojken.Projekt.backend.model.CustomUser;
+import com.bojken.Projekt.backend.model.FilmModel;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FilmDAO implements IFilmDAO {
@@ -136,7 +140,7 @@ public class FilmDAO implements IFilmDAO {
 
                         if (film.getId() == response.get().getId()) {
 
-                            return ResponseEntity.ok(new ErrorResponse("Du har filmen redan sparad :) "));
+                            return ResponseEntity.ok(new ErrorResponse("You have allready saved the film :) "));
                         }
 
                     }
