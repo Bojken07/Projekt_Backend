@@ -1,6 +1,5 @@
-package com.bojken.Projekt.backend.service;
+package com.bojken.Projekt.backend.config;
 
-import com.bojken.Projekt.backend.config.CustomUserDetails;
 import com.bojken.Projekt.backend.model.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

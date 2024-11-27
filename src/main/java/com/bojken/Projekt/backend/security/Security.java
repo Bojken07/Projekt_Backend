@@ -1,7 +1,7 @@
 package com.bojken.Projekt.backend.security;
 
 import com.bojken.Projekt.backend.authorities.UserRole;
-import com.bojken.Projekt.backend.service.CustomUserDetailService;
+import com.bojken.Projekt.backend.config.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

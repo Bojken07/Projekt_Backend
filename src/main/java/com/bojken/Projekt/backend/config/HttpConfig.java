@@ -1,4 +1,4 @@
-package com.bojken.Projekt.backend.config;
+/*package com.bojken.Projekt.backend.config;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

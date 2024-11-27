@@ -2,6 +2,7 @@ package com.bojken.Projekt.backend.dao;
 
 import com.bojken.Projekt.backend.model.CustomUser;
 import com.bojken.Projekt.backend.model.FilmModel;
+import com.bojken.Projekt.backend.repository.FilmRepository;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
