@@ -1,15 +1,15 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.5'
+	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.bojken'
+group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -19,27 +19,30 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation 'io.github.resilience4j:resilience4j-ratelimiter:2.1.0'
+	implementation group: 'me.paulschwarz', name: 'spring-dotenv', version: '4.0.0'
 
-	dependencies {
-		// Jakarta Validation API
-		implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-
-		// Hibernate Validator (implementation av Jakarta Validation API)
-		implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
-
-		// Spring Boot Starter Validation (om du använder Spring Boot)
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
-	}
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.5'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+	useJUnitPlatform() // This is important for JUnit 5 tests
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }

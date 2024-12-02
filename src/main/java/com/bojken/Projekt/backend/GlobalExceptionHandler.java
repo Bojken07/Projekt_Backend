@@ -1,7 +1,6 @@
 package com.bojken.Projekt.backend;
 
-import com.bojken.Projekt.backend.dto.UserDTO;
-
+import com.bojken.Projekt.backend.model.UserDTO;
 import org.springframework.ui.Model;
 import com.bojken.Projekt.backend.authorities.UserRole;
 import org.springframework.http.HttpStatus;
