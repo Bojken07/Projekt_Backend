@@ -1,5 +1,6 @@
 package com.bojken.Projekt.backend.service;
 
+import com.bojken.Projekt.backend.client.FilmApiClient;
 import com.bojken.Projekt.backend.dao.IFilmDAO;
 import com.bojken.Projekt.backend.model.FilmDTO;
 import com.bojken.Projekt.backend.model.FilmModel;

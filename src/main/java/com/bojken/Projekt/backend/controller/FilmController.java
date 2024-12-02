@@ -1,6 +1,11 @@
 package com.bojken.Projekt.backend.controller;
 
 import ch.qos.logback.core.model.Model;
+import com.bojken.Projekt.backend.model.CustomUser;
+import com.bojken.Projekt.backend.model.FilmDTO;
+import com.bojken.Projekt.backend.model.FilmModel;
+import com.bojken.Projekt.backend.service.IFilmService;
+import com.bojken.Projekt.backend.service.IUserService;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class FilmController {
