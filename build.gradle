@@ -26,6 +26,18 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	dependencies {
+		// Jakarta Validation API
+		implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+		// Hibernate Validator (implementation av Jakarta Validation API)
+		implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
+
+		// Spring Boot Starter Validation (om du använder Spring Boot)
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+	}
+
 }
 
 tasks.named('test') {

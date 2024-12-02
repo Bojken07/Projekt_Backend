@@ -2,6 +2,8 @@ package com.bojken.Projekt.backend.repository;
 
 import com.bojken.Projekt.backend.authorities.UserRole;
 import com.bojken.Projekt.backend.model.CustomUser;
+import com.bojken.Projekt.backend.model.UserDTO;
+import com.bojken.Projekt.backend.service.IUserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
