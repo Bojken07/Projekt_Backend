@@ -1,4 +1,4 @@
-package com.bojken.Projekt.backend.controller;
+/*package com.bojken.Projekt.backend.controller;
 
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,3 +13,4 @@ public class CsrfController {
         return csrfToken;
     }
 }
+*/

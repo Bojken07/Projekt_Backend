@@ -1,13 +1,19 @@
 package com.bojken.Projekt.backend.controller;
 
-import org.apache.catalina.connector.Response;
+import com.bojken.Projekt.backend.model.FilmModel;
+import com.bojken.Projekt.backend.response.ErrorResponse;
+import com.bojken.Projekt.backend.response.ListResponse;
+import com.bojken.Projekt.backend.response.Response;
+import com.bojken.Projekt.backend.service.IFilmService;
+import com.bojken.Projekt.backend.service.IUserService;
+import io.github.resilience4j.ratelimiter.RateLimiter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+
 
 @RestController
 @RequestMapping("/films")
@@ -15,6 +21,9 @@ public class Controller {
 
     @Value("${ApiKey}")
     private String ApiKey;
+
+    //private final FilmRepository filmRepository;
+
 
     private final IFilmService filmService;
 
@@ -34,15 +43,17 @@ public class Controller {
         this.userService = userService;
     }
 
+    // TODO - Error handle this shit: internal server error 500 if no film is found - DONE?
     @GetMapping("/{id}")
-    public ResponseEntity<Response> getFilmById (@RequestParam(defaultValue = "movie") String movie, @PathVariable int id) {
+    public ResponseEntity<org.apache.catalina.connector.Response> getFilmById (@RequestParam(defaultValue = "movie") String movie, @PathVariable int id) {
 
         return filmService.getFilmById( id);
 
     }
 
+    //TODO - Make sure that films with same name or id cannot be saved, otherwise you can add many of the same films - DONE!
     @PostMapping("/{id}")
-    public ResponseEntity<Response> saveFilmById (@RequestParam(defaultValue = "movie") String movie, @PathVariable int id) {
+    public ResponseEntity<org.apache.catalina.connector.Response> saveFilmById (@RequestParam(defaultValue = "movie") String movie, @PathVariable int id) throws IOException {
 
         return filmService.saveFilmById("movie" , id);
 
@@ -60,13 +71,15 @@ public class Controller {
 
     @GetMapping("/savedfilms/{id}")
     public ResponseEntity<Response> getFilm (@PathVariable int id) {
-        ResponseEntity<Response> film = filmService.findById(id);
+        ResponseEntity<org.apache.catalina.connector.Response> film = filmService.findById(id);
 
-        return film;
+        FilmModel film2 = (FilmModel) film.getBody();
+        //return film;
+        return ResponseEntity.ok(new ErrorResponse(film2.getTitle()));
     }
 
     @PutMapping("/savedfilms/{id}")
-    public ResponseEntity<Response> changeCountryOfOrigin (@PathVariable("id") int id, @RequestBody String country) {
+    public ResponseEntity<org.apache.catalina.connector.Response> changeCountryOfOrigin (@PathVariable("id") int id, @RequestBody String country) {
 
         if (rateLimiter.acquirePermission()) {
             return filmService.changeCountryOfOrigin(id, country);
@@ -96,7 +109,7 @@ public class Controller {
     }
 
     @GetMapping("/savedfilms/runtime")
-    public ResponseEntity<Response> getAverageRuntime () {
+    public ResponseEntity<ErrorResponse> getAverageRuntime () {
 
         if (rateLimiter.acquirePermission()) {
             return filmService.getAverageRuntime();
@@ -107,7 +120,7 @@ public class Controller {
 
     // example url: "https://localhost:8443/films/search?filmName=Reservoir%20Dogs"
     @GetMapping("/search")
-    public ResponseEntity<Response> searchByTitle (@RequestParam String filmName) {
+    public ResponseEntity<org.apache.catalina.connector.Response> searchByTitle (@RequestParam String filmName) {
 
         if (rateLimiter.acquirePermission()) {
             return filmService.searchFilmByName(filmName);
@@ -116,31 +129,35 @@ public class Controller {
         }
     }
 
+    //Example url: https://localhost:8443/films/country/US?title=Fight%20Club
     @GetMapping("/country/{country}")
-    public ResponseEntity<Response> getFilmsByCountry (@PathVariable("country") String country,
-                                                       @RequestParam(value = "title", required = false) String title) {
+    public ResponseEntity<org.apache.catalina.connector.Response> getFilmsByCountry (@PathVariable("country") String country,
+                                                                                     @RequestParam(value = "title", required = false) String title) {
 
 
         return filmService.getFilmByCountry(country, title);
 
     }
 
+
     @GetMapping("/info")
-    public ResponseEntity<Response> getInfo () {
+    public ResponseEntity<org.apache.catalina.connector.Response> getInfo () {
 
         return filmService.getInfo();
 
     }
 
     @GetMapping("/getfilm/{filmId}")
-    public ResponseEntity<Response> getFilmWithAdditionalInfo (@PathVariable("filmId") int filmId,
-                                                               @RequestParam(value = "opinion", defaultValue = "false") boolean opinion,
-                                                               @RequestParam(value = "description", defaultValue = "false") boolean description) {
+    //https://localhost:8443/films/getfilm/1?opinion=true&description=true example
+    public ResponseEntity<org.apache.catalina.connector.Response> getFilmWithAdditionalInfo (@PathVariable("filmId") int filmId,
+                                                                                             @RequestParam(value = "opinion", defaultValue = "false") boolean opinion,
+                                                                                             @RequestParam(value = "description", defaultValue = "false") boolean description) {
 
         return filmService.getFilmWithAdditionalInfo(filmId, opinion, description);
 
     }
 
+    /*
     @GetMapping("/image/{id}")
     private ResponseEntity<byte[]> seeImage (@PathVariable Integer id) throws IOException {
         FilmModel film = filmService.getFilmById(id).get();
@@ -175,8 +192,15 @@ public class Controller {
 //
 //            filmService.save(film);
 
-        //return byteArrayOutputStream.toByteArray();
+            //return byteArrayOutputStream.toByteArray();
 
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(film.getImage());
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(film.getImage());
+
+
+
     }
+
+     */
+
+
 }

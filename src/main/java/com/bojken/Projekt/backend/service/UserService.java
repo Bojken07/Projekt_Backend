@@ -3,6 +3,7 @@ package com.bojken.Projekt.backend.service;
 import com.bojken.Projekt.backend.dao.IFilmDAO;
 import com.bojken.Projekt.backend.model.CustomUser;
 import com.bojken.Projekt.backend.model.FilmModel;
+import com.bojken.Projekt.backend.model.UserDTO;
 import com.bojken.Projekt.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

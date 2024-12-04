@@ -1,20 +1,16 @@
 package com.bojken.Projekt.backend.model;
 
-import org.apache.catalina.connector.Response;
-
-
-public class FilmDTO implements Response {
-
-    private Long id;
+public class UserFilmDTO {
+    private Integer id;
     private String title;
     private String opinion;
-    private String description;
 
-    public Long getId () {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId (Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -32,13 +28,5 @@ public class FilmDTO implements Response {
 
     public void setOpinion(String opinion) {
         this.opinion = opinion;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

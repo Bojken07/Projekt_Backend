@@ -6,7 +6,7 @@ import org.apache.catalina.connector.Response;
 import java.util.List;
 
 @Entity
-public class FilmModel implements Response {
+public class FilmModel extends Response {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

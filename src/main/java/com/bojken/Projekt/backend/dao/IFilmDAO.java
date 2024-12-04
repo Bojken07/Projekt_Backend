@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Optional;
 
 public interface IFilmDAO {
     FilmModel save(FilmModel filmModel);
@@ -20,7 +21,5 @@ public interface IFilmDAO {
 
     Optional<FilmModel> findByTitleIgnoreCase(String filmName);
 
-    ResponseEntity<Response> getFilmById(int id);
-
-    ResponseEntity<Response> saveFilmById(String movie, int id);
+    void saveFilm(FilmModel filmModel);
 }

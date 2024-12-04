@@ -16,7 +16,7 @@ public record UserDTO(
         @Size(message = "Måste vara minst 3, inte mer än 10", min = 3, max = 10)
         String password,
 
-        @NotNull(message = "ska vara något")
+        //@NotNull(message = "ska vara något")
         UserRole userRole
 
 ) {

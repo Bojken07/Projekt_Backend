@@ -1,13 +1,22 @@
 package com.bojken.Projekt.backend.controller;
 
-import ch.qos.logback.core.model.Model;
+import com.bojken.Projekt.backend.model.*;
+import org.springframework.ui.Model;
 import com.bojken.Projekt.backend.authorities.UserRole;
+import com.bojken.Projekt.backend.model.CustomUser;
+import com.bojken.Projekt.backend.model.UserDTO;
+import com.bojken.Projekt.backend.service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+import java.util.Arrays;
 
 @Controller
 public class UserController {
@@ -49,7 +58,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser (@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult bindingResult
-            ,Model model
+            , Model model
 
                                 //,@ModelAttribute("roles") UserRole role
     ) {

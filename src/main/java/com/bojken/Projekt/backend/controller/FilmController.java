@@ -1,49 +1,37 @@
 package com.bojken.Projekt.backend.controller;
 
-import ch.qos.logback.core.model.Model;
-import com.bojken.Projekt.backend.model.CustomUser;
-import com.bojken.Projekt.backend.model.FilmDTO;
-import com.bojken.Projekt.backend.model.FilmModel;
+import com.bojken.Projekt.backend.model.*;
+import com.bojken.Projekt.backend.response.ErrorResponse;
 import com.bojken.Projekt.backend.service.IFilmService;
 import com.bojken.Projekt.backend.service.IUserService;
 import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class FilmController {
 
-    @Value("${app.username}")
-    private String username;
-
-    @Value("${app.password}")
-    private String password;
-
     private final IFilmService filmService;
     private final IUserService userService;
-    private final WebClient webClient;
+    private final IUserFilmService userFilmService;
+    // private final WebClient webClient;
 
-    public FilmController (IFilmService filmService, IUserService userService, WebClient.Builder webClientBuilder) {
+    public FilmController (IFilmService filmService, IUserService userService,
+                           //, WebClient.Builder webClientBuilder
+                           IUserFilmService userFilmService) {
         this.filmService = filmService;
         this.userService = userService;
-        this.webClient = webClientBuilder
-                .baseUrl("https://localhost:8443/films/")
-                .filter((request, next) -> {
-                    System.out.println("Request Headers: " + request.headers());
-                    return next.exchange(request);
-                })
-                .build();
+        //this.webClient = webClientBuilder.baseUrl("https://localhost:8443/films/").filter((request, next) -> {System.out.println("Request Headers: " + request.headers());return next.exchange(request);}).build();
+        this.userFilmService = userFilmService;
     }
 
     @GetMapping("/")
@@ -53,16 +41,24 @@ public class FilmController {
 
         String username = authentication.getName();
 
-        CustomUser user = userService.findUserByUsername(username).get();
+        if(userService.findUserByUsername(username).isPresent()) {
 
-        List<FilmModel> filmList = user.getFilmList();
+            CustomUser user = userService.findUserByUsername(username).get();
+
+            List<FilmModel> filmList = user.getFilmList();
+
+            model.addAttribute("films", filmList);
+            model.addAttribute("username", username);
+
+            return "index";
+        }
+
 
         //TODO - Showing films saved by logged in user
         //model.addAttribute("films", filmService.findAll());
-        model.addAttribute("films", filmList);
-        model.addAttribute("username", username);
 
-        return "index";
+        return "redirect:/login";
+
     }
 
     @GetMapping("/movies/savedfilms")
@@ -138,8 +134,7 @@ public class FilmController {
     public String search (@RequestParam("filmId") String filmId, Model model) {
 
         System.out.println("in postMapping for searchid");
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
+
 
         // TODO - plenty! Check the username and password, and change to https, also error handle
         FilmModel film1 = null;
@@ -174,7 +169,7 @@ public class FilmController {
     @PostMapping("/movies/getfilm")
     public String getFilm (@ModelAttribute FilmModel film, Model model) {
 
-
+        //TODO - go to searchid-page.html to include more film parameters, or consider using a DTO..
         System.out.println("film.title: " + film.getTitle());
         System.out.println("film.id: " + film.getId());
         System.out.println("film.poster_path: " + film.getPoster_path());
@@ -225,6 +220,83 @@ public class FilmController {
 
         //model.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "redirect:/";
+    }
+
+    @GetMapping("/opinion/{id}")
+    public String toOpinionPage (@PathVariable Integer id, Model model) {
+
+        FilmModel film = filmService.getFilmById(id).get();
+        CustomUser currentUser = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
+        Optional<UserFilm> optionalUserFilm = userFilmService.findByFilmModelAndCustomUser(film, currentUser);
+
+        UserFilm userFilm = null;
+
+        UserFilmDTO userFilmDTO = new UserFilmDTO();
+
+        if (optionalUserFilm.isPresent()) {
+
+            userFilm = optionalUserFilm.get();
+            userFilmDTO.setOpinion(userFilm.getOpinion());
+
+        }
+
+        userFilmDTO.setId(film.getFilmid());
+        userFilmDTO.setTitle(film.getTitle());
+
+
+        //film.getOpinion();
+
+        model.addAttribute("film", userFilmDTO);
+        //model.addAttribute("opinion", userFilm.getOpinion());
+        return "opinion-page";
+    }
+
+    @PostMapping("/opinion")
+    public String addOpinion (@ModelAttribute("film") UserFilmDTO film, Model model) {
+
+        filmService.addOpinion(film.getId(), film.getOpinion());
+
+        CustomUser user = userService.findUserByUsername("test").get();
+
+        //FilmModel filmModel = user.getFilmList().get(0);
+
+        // filmModel.getOpinion();
+
+        model.addAttribute("film", film);
+
+        return "opinion-page";
+    }
+
+    @GetMapping("/movies/info")
+    public String getInfo (Model model) {
+
+        ErrorResponse info = (ErrorResponse) filmService.getInfo().getBody();
+
+        System.out.println("info : " + info.getResponseMessage());
+
+        model.addAttribute("info", info.getResponseMessage());
+
+        return "info-page";
+    }
+
+    @GetMapping("/movies/info/{id}")
+    public String getFilmInfo (@PathVariable int id,
+                               Model model) {
+
+        FilmDTO filmDTO = (FilmDTO) filmService.getFilmWithAdditionalInfo(id, true, true).getBody();
+
+        model.addAttribute("film", filmDTO);
+
+        return "film-info";
+    }
+
+    @PostMapping("/movies/delete/{id}")
+    public String deleteFilm (@PathVariable int id) throws Exception {
+
+        filmService.deleteById(id);
+
+        return "redirect:/movies/savedfilms";
     }
 
 
