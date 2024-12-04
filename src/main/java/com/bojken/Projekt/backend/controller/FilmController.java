@@ -3,6 +3,7 @@ package com.bojken.Projekt.backend.controller;
 import com.bojken.Projekt.backend.model.*;
 import com.bojken.Projekt.backend.response.ErrorResponse;
 import com.bojken.Projekt.backend.service.IFilmService;
+import com.bojken.Projekt.backend.service.IUserFilmService;
 import com.bojken.Projekt.backend.service.IUserService;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
